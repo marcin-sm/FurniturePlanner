@@ -221,4 +221,4 @@ Prod.Aggregate(ignoreRotate=True)
 
 print (len(Prod.plates), ' but should be ', str(len(Kitchen.plates)+len(Warderobe.plates)))
 
-Corpus.showComponents(Corpus(2070,1200,500,'up',True,True),True)
+Corpus.showComponents(Corpus(2070,1200,500,'up',True,True),False)
