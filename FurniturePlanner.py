@@ -83,9 +83,9 @@ class Corpus:
         if DownOrUp == "down":
             self.accesories.append ("4 x nogi")
             if isCorner:
-                self.Lwall = Plate (h,d,glob.FplatT,'wall')
-                self.Lwall.name = 'Sciana lewa'
-                self.plates.append (self.Lwall)
+                self.Cwall = Plate (h,d+5,glob.FplatT,'wall')
+                self.Cwall.name = 'Sciana narozna'
+                self.plates.append (self.Cwall)
 
 
         elif DownOrUp == "up":
