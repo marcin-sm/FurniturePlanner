@@ -7,12 +7,12 @@ class glob:
 
 class Plate:
 
-    def __init__(self,height,width,thickness, type):
+    def __init__(self,height,width,thickness, type, name=''):
         self.height = height
         self.width = width
         self.thickness = thickness
         self.area = self.height * self.width
-        self.name = ''
+        self.name = name
         self.type = type
         self.material = ''
         self.Sid = '' 
@@ -39,13 +39,15 @@ class Corpus:
     BackOffset = 5
     FrontOffset = 2
 
-    def __init__(self,h,w,d, DownOrUp ,FullTopWall: bool, isCorner: bool):
+    def __init__(self,h,w,d, DownMiddleUp, Function,  isCorner: bool, FullTopWall: bool,NumOrKitchenware=''):
         self.plates =[]
         self.accesories = []
         self.height = h
         self.width = w
         self.depth = d
-        self.DownOrUp = DownOrUp
+        self.DownMiddleUp = DownMiddleUp
+        self.Function = Function
+        self.NumOrKitchenware = NumOrKitchenware
         self.isCorner = isCorner
         self.FullTopWall = FullTopWall
 
@@ -80,7 +82,7 @@ class Corpus:
         self.Front.name = 'Front'
         self.plates.append(self.Front) 
 
-        if DownOrUp == "down":
+        if DownMiddleUp == "down":
             self.accesories.append ("4 x nogi")
             if isCorner:
                 self.Cwall = Plate (h,d+5,glob.FplatT,'wall')
@@ -88,7 +90,7 @@ class Corpus:
                 self.plates.append (self.Cwall)
 
 
-        elif DownOrUp == "up":
+        elif DownMiddleUp == "up":
             self.accesories.append ("2 x wieszak")
             if isCorner:
                 self.Cback = Plate (h,w-d-glob.FplatT,glob.FplatT,'wall')
@@ -105,6 +107,21 @@ class Corpus:
                 self.plates.append (self.CTwall)
                 self.accesories.append ("2 x wieszak")
 
+        #function section 
+        functions = ['drawers','kitchenware', 'shelfs']
+
+        if Function in functions:
+
+            if Function == 'shelfs':
+                numberOfShelfs = int(h/300)
+                for i in range(numberOfShelfs):
+                    self.plates.append (Plate (w-2*glob.FplatT-0.1,d-glob.FplatT,glob.FplatT,'shelf','polka'))
+
+
+        else:
+
+            print ("no such function as",Function)
+
 
 
 
@@ -114,7 +131,7 @@ class Corpus:
         info =''
         if self.isCorner: info = info + 'narozny'
         if not self.FullTopWall: info = info + ', niepelny wieniec gorny'
-        print ("Korpus (",self.DownOrUp,") - ", self.height,'mm',' x ', self.width,'mm',' x ', self.depth,'mm [',info,']')
+        print ("Korpus (",self.DownMiddleUp,") - ", self.height,'mm',' x ', self.width,'mm',' x ', self.depth,'mm [',info,']')
         for plate in self.plates:
             print (plate.name,': ',plate.height,'mm',' x ', plate.width,'mm')
             if plate.thickness == glob.FplatT: totalArea=totalArea+plate.area
