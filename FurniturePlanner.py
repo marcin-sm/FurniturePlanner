@@ -4,6 +4,7 @@ import copy
 class glob:
     FplatT = 18
     BplatT = 3
+    Dfornir = 'RAL9001'
 
 class Plate:
 
@@ -15,6 +16,9 @@ class Plate:
         self.name = name
         self.type = type
         self.material = ''
+        self.covering = glob.Dfornir
+        self.edgesTaped = [0,0,0,0]
+
         self.Sid = '' 
         self.id = str(self.height)+'x'+str(self.width)+'x'+str(self.thickness)+'_'+str(self.type)
         self.Sdim= ''
@@ -27,6 +31,9 @@ class Plate:
     
     def PrintPlate(self):
         print (self.name, self.thickness, "mm  : ", self.height, "mm x ", self.width, "mm")
+    
+    def TapeSum(self):
+        return sum(self.edgesTaped)
 
     #def change id because of type
         
@@ -50,32 +57,38 @@ class Corpus:
         self.NumOrKitchenware = NumOrKitchenware
         self.isCorner = isCorner
         self.FullTopWall = FullTopWall
-
+        #Plate.edges = [height,width,height,width]
         self.Back = Plate(h-2*self.BackOffset,w-2*self.BackOffset,glob.BplatT,'back')
         self.Back.name = 'Plecy'
         self.plates.append(self.Back)
 
         self.Lwall = Plate (h,d,glob.FplatT,'wall')
         self.Lwall.name = 'Sciana lewa'
+        self.Lwall.edgesTaped = [h,d,0,d]
         self.plates.append (self.Lwall)
         self.Rwall = Plate (h,d,glob.FplatT,'wall')
         self.Rwall.name = 'Sciana prawa'
+        self.Rwall.edgesTaped = [0,d,h,d]
         self.plates.append (self.Rwall)
 
         self.Bwall = Plate (w-2*glob.FplatT,d,glob.FplatT,'wreath')
         self.Bwall.name = 'Wieniec dolny'
+        self.Bwall.edgesTaped = [w-2*glob.FplatT,0,0,0]
         self.plates.append (self.Bwall)
 
         if FullTopWall:
             self.Twall = Plate (w-2*glob.FplatT,d,glob.FplatT,'wreath')
             self.Twall.name = 'Wieniec gorny'
+            self.Twall.edgesTaped = [w-2*glob.FplatT,0,0,0]
             self.plates.append (self.Twall)
         else:
             self.Twall1 = Plate (w-2*glob.FplatT,100,glob.FplatT,'wreath')
             self.Twall1.name = 'Wieniec gorny 1'
+            self.Twall1.edgesTaped = [w-2*glob.FplatT,0,w-2*glob.FplatT,0]
             self.plates.append (self.Twall1)
             self.Twall2 = Plate (w-2*glob.FplatT,100,glob.FplatT,'wreath')
             self.Twall2.name = 'Wieniec gorny 2'
+            self.Twall2.edgesTaped = [w-2*glob.FplatT,0,w-2*glob.FplatT,0]
             self.plates.append (self.Twall2)
 
         self.Front = Plate(h-2*self.FrontOffset,w-2*self.FrontOffset,glob.FplatT, 'front')
@@ -95,15 +108,19 @@ class Corpus:
             if isCorner:
                 self.Cback = Plate (h,w-d-glob.FplatT,glob.FplatT,'wall')
                 self.Cback.name = 'Plecy narozne'
+                self.Cback.edgesTaped = [0,w-d-glob.FplatT,0,w-d-glob.FplatT]
                 self.plates.append (self.Cback)
                 self.Cwall = Plate (h,d,glob.FplatT,'wall')
                 self.Cwall.name = 'Sciana narozna'
+                self.Cwall.edgesTaped = [h,d,0,d]
                 self.plates.append (self.Cwall)
                 self.CBwall = Plate (w-d-glob.FplatT,d,glob.FplatT,'wreath')
                 self.CBwall.name = 'Wieniec narozny dolny'
+                self.CBwall.edgesTaped = [w-d-glob.FplatT,0,0,0]
                 self.plates.append (self.CBwall)
                 self.CTwall = Plate (w-d-glob.FplatT,d,glob.FplatT,'wreath')
                 self.CTwall.name = 'Wieniec narozny gorny'
+                self.CTwall.edgesTaped = [w-d-glob.FplatT,0,0,0]
                 self.plates.append (self.CTwall)
                 self.accesories.append ("2 x wieszak")
 
@@ -115,7 +132,9 @@ class Corpus:
             if Function == 'shelfs':
                 numberOfShelfs = int(h/300)
                 for i in range(numberOfShelfs):
-                    self.plates.append (Plate (w-2*glob.FplatT-0.1,d-glob.FplatT,glob.FplatT,'shelf','polka'))
+                    plat = Plate (w-2*glob.FplatT-1,d-glob.FplatT,glob.FplatT,'shelf','Polka')
+                    plat.edgesTaped = [plat.height,0,0,0]
+                    self.plates.append (plat)
 
 
         else:
@@ -128,16 +147,19 @@ class Corpus:
 
     def showComponents(self, accesories:bool):
         totalArea = 0
+        totalTape = 0
         info =''
         if self.isCorner: info = info + 'narozny'
         if not self.FullTopWall: info = info + ', niepelny wieniec gorny'
         print ("Korpus (",self.DownMiddleUp,") - ", self.height,'mm',' x ', self.width,'mm',' x ', self.depth,'mm [',info,']')
         for plate in self.plates:
-            print (plate.name,': ',plate.height,'mm',' x ', plate.width,'mm')
-            if plate.thickness == glob.FplatT: totalArea=totalArea+plate.area
+            print (plate.name,': ',plate.height,'mm',' x ', plate.width,'mm', '| Okleina',Plate.TapeSum(plate)/1000,'m:', str(plate.edgesTaped))
+            if plate.thickness == glob.FplatT: 
+                totalArea=totalArea+plate.area
+                totalTape = totalTape+Plate.TapeSum(plate)/1000
         
         totalArea = totalArea * 0.000001
-        print ('\nMaterial uzyty: ',round(totalArea,2), '㎡')
+        print ('\nMaterial uzyty: ',round(totalArea,2), '㎡', "| Okleina:",round(totalTape,2), 'm')
 
         if accesories:
             print("\nDodatkowe akcesoria: ", str(self.accesories))
