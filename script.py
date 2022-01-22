@@ -5,4 +5,4 @@ Projects = []
 
 
 
-Corpus.showComponents(Corpus(2070,1000,500,'up','shelfs',True,True),True)
+Corpus.showComponents(Corpus(720,600,500,'up','shelfs',True,True),True)

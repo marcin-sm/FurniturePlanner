@@ -5,6 +5,7 @@ class glob:
     FplatT = 18
     BplatT = 3
     Dfornir = 'RAL9001'
+    Operations = ['CUT', 'TAPE', 'DRILL', 'PAINT']
 
 class Plate:
 
@@ -18,7 +19,9 @@ class Plate:
         self.material = ''
         self.covering = glob.Dfornir
         self.edgesTaped = [0,0,0,0]
-
+        self.toDrill = False
+        self.isDrilled = False
+        self.numOfHoles = 0
         self.Sid = '' 
         self.id = str(self.height)+'x'+str(self.width)+'x'+str(self.thickness)+'_'+str(self.type)
         self.Sdim= ''
@@ -29,11 +32,14 @@ class Plate:
             self.Sid = str(self.width)+'x'+str(self.height)+'x'+str(self.thickness)+'_'+str(self.type)
             self.Sdim = str(self.width)+'x'+str(self.height)+'x'+str(self.thickness)
     
+    def TapeSum(self):
+        return sum(self.edgesTaped)
+    
+
     def PrintPlate(self):
         print (self.name, self.thickness, "mm  : ", self.height, "mm x ", self.width, "mm")
     
-    def TapeSum(self):
-        return sum(self.edgesTaped)
+
 
     #def change id because of type
         
@@ -65,10 +71,12 @@ class Corpus:
         self.Lwall = Plate (h,d,glob.FplatT,'wall')
         self.Lwall.name = 'Sciana lewa'
         self.Lwall.edgesTaped = [h,d,0,d]
+        PlanDrilling (self.Lwall)
         self.plates.append (self.Lwall)
         self.Rwall = Plate (h,d,glob.FplatT,'wall')
         self.Rwall.name = 'Sciana prawa'
         self.Rwall.edgesTaped = [0,d,h,d]
+        PlanDrilling (self.Rwall)
         self.plates.append (self.Rwall)
 
         self.Bwall = Plate (w-2*glob.FplatT,d,glob.FplatT,'wreath')
@@ -109,10 +117,12 @@ class Corpus:
                 self.Cback = Plate (h,w-d-glob.FplatT,glob.FplatT,'wall')
                 self.Cback.name = 'Plecy narozne'
                 self.Cback.edgesTaped = [0,w-d-glob.FplatT,0,w-d-glob.FplatT]
+                #drill
                 self.plates.append (self.Cback)
                 self.Cwall = Plate (h,d,glob.FplatT,'wall')
                 self.Cwall.name = 'Sciana narozna'
                 self.Cwall.edgesTaped = [h,d,0,d]
+                #drill
                 self.plates.append (self.Cwall)
                 self.CBwall = Plate (w-d-glob.FplatT,d,glob.FplatT,'wreath')
                 self.CBwall.name = 'Wieniec narozny dolny'
@@ -148,18 +158,26 @@ class Corpus:
     def showComponents(self, accesories:bool):
         totalArea = 0
         totalTape = 0
+        totalHoles = 0
         info =''
         if self.isCorner: info = info + 'narozny'
         if not self.FullTopWall: info = info + ', niepelny wieniec gorny'
         print ("Korpus (",self.DownMiddleUp,") - ", self.height,'mm',' x ', self.width,'mm',' x ', self.depth,'mm [',info,']')
         for plate in self.plates:
-            print (plate.name,': ',plate.height,'mm',' x ', plate.width,'mm', '| Okleina',Plate.TapeSum(plate)/1000,'m:', str(plate.edgesTaped))
+            details = str (plate.name) + ': '+str(plate.height)+'mm'+' x '+ str(plate.width)+'mm'
+            if Plate.TapeSum(plate) != 0:
+                details = details + ' | Okleina ' + str(Plate.TapeSum(plate)/1000) +'m: '+ str(plate.edgesTaped)
+            if plate.numOfHoles != 0:
+                details = details + ' | Otwory: '+ '2x'+str(plate.numOfHoles)
+            #print (plate.name,': ',plate.height,'mm',' x ', plate.width,'mm', '| Okleina',Plate.TapeSum(plate)/1000,'m:', str(plate.edgesTaped), '| Otwory:', '2x'+str(plate.numOfHoles))
+            print (details)
             if plate.thickness == glob.FplatT: 
                 totalArea=totalArea+plate.area
                 totalTape = totalTape+Plate.TapeSum(plate)/1000
+                totalHoles = totalHoles + 2*plate.numOfHoles
         
         totalArea = totalArea * 0.000001
-        print ('\nMaterial uzyty: ',round(totalArea,2), '㎡', "| Okleina:",round(totalTape,2), 'm')
+        print ('\nMaterial uzyty: ',round(totalArea,2), '㎡', "| Okleina:",round(totalTape,2), 'm', "| Calkowita liczba otworow:", totalHoles)
 
         if accesories:
             print("\nDodatkowe akcesoria: ", str(self.accesories))
@@ -222,3 +240,5 @@ class Production:
         if not ignoreRotate: c = Counter(plat.id for plat in lst.plates)
         else: c = Counter(plat.Sid for plat in lst.plates)
         print (c.most_common())
+
+from DrillModule import PlanDrilling
