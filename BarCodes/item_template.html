@@ -1,6 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
 <img src="{{label_tools.qr_code(sample_id)}}" />
 <span class='label'>
-    {{ sample_name }} <br />
-    Any text <br />
-    {{ label_tools.now() }}
+    {{ plate_width }} x {{ plate_height }} x 18<br />
 </span>
+
+<div id="rectangle" style = "
+width: {{ plate_width }}mm; 
+height: {{ plate_height }}mm;
+border-top: {{ border_top }}mm solid #000000;
+border-left: {{ border_left }}mm solid #000000;
+border-right: {{ border_right }}mm solid #000000;
+border-bottom: {{ border_bottom }}mm solid #000000;
+"></div>
+</body>
+</html>
