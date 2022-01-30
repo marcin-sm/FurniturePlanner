@@ -14,15 +14,18 @@ img {
     font-weight: bold;
     vertical-align: middle;
     display: inline-block;
+
     font-size: 9.5px;
-    /*transform-origin: center;
-    transform: rotate(270deg);*/
+    border-radius: 25px;
+    padding: 0.5mm;
     writing-mode: vertical-lr;
+
     transform: rotate(270deg);
     padding: -5mm;
     margin: -5mm;
 
 }
+
 
 #rectangle{
     
@@ -32,7 +35,29 @@ img {
     vertical-align: middle;
     overflow: hidden;
     border: 0.5mm solid #000000;
+    position: relative;
 
 
 }
   
+.dim_vertical {
+    font-family: Arial, Verdana, Helvetica, sans;
+    font-weight: bold;
+    position: absolute;
+    top: 40%;
+    left: 85%;
+    
+    font-size: 6.5px;
+    writing-mode: vertical-lr;
+    transform: rotate(270deg);
+}
+
+.dim_horizontal {
+    font-family: Arial, Verdana, Helvetica, sans;
+    font-weight: bold;
+    position: absolute;
+    top: 5%;
+    left: 40%;
+    
+    font-size: 6.5px;
+}

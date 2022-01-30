@@ -6,8 +6,10 @@
 
 <body>
 <img src="{{label_tools.qr_code(sample_id)}}" />
-<span class='label'>
-    {{ plate_width }} x {{ plate_height }} x 18<br />
+<span class='label' {% if onStock %}
+style = "background-color:black; color:white;"
+{% endif %}>
+    {{ sample_name }}
 </span>
 
 <div style = "display: inline-block; padding:{{ space }}mm"> </div>
@@ -19,6 +21,11 @@ border-top: {{ border_top }}mm solid #000000;
 border-left: {{ border_left }}mm solid #000000;
 border-right: {{ border_right }}mm solid #000000;
 border-bottom: {{ border_bottom }}mm solid #000000;
-"></div>
+">
+<span class="dim_horizontal">{{ plate_width }}</span>
+<span class="dim_vertical">{{ plate_height }}</span>
+
+
+</div>
 </body>
 </html>
