@@ -7,6 +7,7 @@ def Prop (width,height,ret):
     INheight = 0
     OUTwidth = 0
     OUTheight = 0
+    rotate = False
     
     if width > height:
         INwidth = width
@@ -14,6 +15,7 @@ def Prop (width,height,ret):
     else:
         INwidth = height
         INheight = width
+        rotate =True
 
     ratio = INwidth/INheight
 
@@ -38,12 +40,17 @@ def Prop (width,height,ret):
         return INwidth
 
     elif ret == "h":
-        return INheight 
+        return INheight
+
+    elif ret =="rotated?":
+        return rotate 
 
 def CreateEntry (width, height, edgesTaped:list, code, info, sign, onStock):
 
-    borders = ["0.7" if True else "0.1" for x in edgesTaped]
-    return (dict(sample_id=info, sample_name=code,Lwidth= str(Prop(width,height,"w")), Lheight=str(Prop(width,height,"h")) ,plate_width=str(Prop(width,height,"W")), plate_height=str(Prop(width,height,"H")), border_top=borders[0], border_bottom=borders[2], border_left=borders[1], border_right=borders[3], space=str(Prop(width,height,"S")), onStock=onStock, sign=sign ))
+    borders = ["0.7" if x>0 else "0.1" for x in edgesTaped]
+    if Prop (width, height,"rotated?"):
+        borders.insert(0, borders.pop()) #rotate borders
+    return (dict(sample_id=info, sample_name=code,Lwidth= str(Prop(width,height,"w")), Lheight=str(Prop(width,height,"h")) ,plate_width=str(Prop(width,height,"W")), plate_height=str(Prop(width,height,"H")), border_top=borders[1], border_bottom=borders[3], border_left=borders[0], border_right=borders[2], space=str(Prop(width,height,"S")), onStock=onStock, sign=sign ))
 
 def Generator(listOfrecords, output):
     label_writer = LabelWriter("Labels/item_template.html", default_stylesheets=("Labels/style.css",))

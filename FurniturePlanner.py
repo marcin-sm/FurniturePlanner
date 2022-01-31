@@ -255,7 +255,7 @@ def RandomBool():
 def GenerteLabels (listOfPlates: list, path):
     records =[]
     for p in listOfPlates:
-        records.append(CreateEntry(p.width,p.height,p.edgesTaped,RandomCode(10),RandomCode(20),RandomCode(1),RandomBool()))
+        records.append(CreateEntry(p.width,p.height,p.edgesTaped,RandomCode(10),RandomCode(20),p.name,RandomBool()))
     Generator (records,path)
 
 from DrillModule import PlanDrilling
