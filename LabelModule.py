@@ -1,8 +1,4 @@
-#from sre_constants import IN
-#from turtle import width
 from blabel import LabelWriter
-#from numpy import sign
-
 
 def Prop (width,height,ret):
     Xmax = 23.5
@@ -49,6 +45,9 @@ def CreateEntry (width, height, edgesTaped:list, code, info, sign, onStock):
     borders = ["0.7" if True else "0.1" for x in edgesTaped]
     return (dict(sample_id=info, sample_name=code,Lwidth= str(Prop(width,height,"w")), Lheight=str(Prop(width,height,"h")) ,plate_width=str(Prop(width,height,"W")), plate_height=str(Prop(width,height,"H")), border_top=borders[0], border_bottom=borders[2], border_left=borders[1], border_right=borders[3], space=str(Prop(width,height,"S")), onStock=onStock, sign=sign ))
 
+def Generator(listOfrecords, output):
+    label_writer = LabelWriter("Labels/item_template.html", default_stylesheets=("Labels/style.css",))
+    label_writer.write_labels(listOfrecords, target=output)
 
 
 label_writer = LabelWriter("Labels/item_template.html", default_stylesheets=("Labels/style.css",))

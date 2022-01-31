@@ -1,5 +1,7 @@
 from collections import Counter
 import copy
+import random
+
 
 class glob:
     FplatT = 18
@@ -38,10 +40,6 @@ class Plate:
 
     def PrintPlate(self):
         print (self.name, self.thickness, "mm  : ", self.height, "mm x ", self.width, "mm")
-    
-
-
-    #def change id because of type
         
 
 class Accesory:
@@ -241,4 +239,24 @@ class Production:
         else: c = Counter(plat.Sid for plat in lst.plates)
         print (c.most_common())
 
+
+def RandomCode (length):
+	start = 0   # inclusive
+	end = 10	# exclusive
+
+	x = random.choices(range(start, end), k=length)
+	code = [str(int) for int in x]
+	y = "".join(code)
+	return y
+
+def RandomBool():
+    return bool(random.getrandbits(1))
+
+def GenerteLabels (listOfPlates: list, path):
+    records =[]
+    for p in listOfPlates:
+        records.append(CreateEntry(p.width,p.height,p.edgesTaped,RandomCode(10),RandomCode(20),RandomCode(1),RandomBool()))
+    Generator (records,path)
+
 from DrillModule import PlanDrilling
+from LabelModule import CreateEntry, Generator
