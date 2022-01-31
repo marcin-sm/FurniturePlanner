@@ -2,7 +2,7 @@ from blabel import LabelWriter
 
 def Prop (width,height,ret):
     Xmax = 23.5
-    Ymax = 15
+    Ymax = 11
     INwidth = 0
     INheight = 0
     OUTwidth = 0

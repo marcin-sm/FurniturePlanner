@@ -33,7 +33,7 @@ img {
     height:10mm;*/
     display: inline-block; /*inline-block*/
     vertical-align: middle;
-    overflow: hidden;
+    overflow: visible;
     border: 0.5mm solid #000000;
     position: relative;
 
@@ -44,8 +44,8 @@ img {
     font-family: Arial, Verdana, Helvetica, sans;
     font-weight: bold;
     position: absolute;
-    top: 40%;
-    left: 80%;
+    top: 30%;
+    left: 100%;
     
     font-size: 10px;
     writing-mode: vertical-lr;
@@ -56,7 +56,7 @@ img {
     font-family: Arial, Verdana, Helvetica, sans;
     font-weight: bold;
     position: absolute;
-    top: 5%;
+    bottom: 105%;
     left: 40%;
     
     font-size: 10px;

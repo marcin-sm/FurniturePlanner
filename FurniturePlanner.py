@@ -193,6 +193,7 @@ class Project:
 
         if type(item) == Corpus:
             self.corpuses.append(item)
+            self.plates = self.plates + item.plates
         elif type(item) == Plate:
             self.plates.append(item)
 
