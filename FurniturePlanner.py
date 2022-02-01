@@ -7,7 +7,7 @@ class glob:
     FplatT = 18
     BplatT = 3
     Dfornir = 'RAL9001'
-    Operations = ['CUT', 'TAPE', 'DRILL', 'PAINT']
+    Operations = ['CUT', 'TAPE', 'DRILL', 'PAINT', 'STORE', 'PACK']
 
 class Plate:
 
@@ -24,6 +24,7 @@ class Plate:
         self.toDrill = False
         self.isDrilled = False
         self.numOfHoles = 0
+        self.code = ''
         self.Sid = '' 
         self.id = str(self.height)+'x'+str(self.width)+'x'+str(self.thickness)+'_'+str(self.type)
         self.Sdim= ''
