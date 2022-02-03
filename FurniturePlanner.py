@@ -8,6 +8,8 @@ class glob:
     BplatT = 3
     Dfornir = 'RAL9001'
     Operations = ['CUT', 'TAPE', 'DRILL', 'PAINT', 'STORE', 'PACK']
+    Modes = ['OPERATION','VIEW']
+    server_url="http://192.168.100.12:8001/?code="
 
 class Plate:
 
@@ -24,7 +26,8 @@ class Plate:
         self.toDrill = False
         self.isDrilled = False
         self.numOfHoles = 0
-        self.code = ''
+        self.code = RandomCode(10)
+        self.qr = glob.server_url+self.code
         self.Sid = '' 
         self.id = str(self.height)+'x'+str(self.width)+'x'+str(self.thickness)+'_'+str(self.type)
         self.Sdim= ''
@@ -257,7 +260,7 @@ def RandomBool():
 def GenerteLabels (listOfPlates: list, path):
     records =[]
     for p in listOfPlates:
-        records.append(CreateEntry(p.width,p.height,p.edgesTaped,RandomCode(10),RandomCode(20),p.name,RandomBool()))
+        records.append(CreateEntry(p.width,p.height,p.edgesTaped,p.code,p.qr,p.name,RandomBool()))
     Generator (records,path)
 
 from DrillModule import PlanDrilling
