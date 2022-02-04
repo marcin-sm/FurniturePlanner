@@ -51,14 +51,19 @@ def CreateEntry (width, height, edgesTaped:list, code, info, sign, onStock):
 
 
 
-label_writer = LabelWriter("Labels/item_template.html", default_stylesheets=("Labels/style.css",))
+label_writer = LabelWriter("Labels/operation_template.html", default_stylesheets=("Labels/style.css",))
 records = [
-    dict(sample_id="4628935901", sample_name="4 628 935901",Lwidth= "720", Lheight="510" ,plate_width=str(Prop(510,720,"W")), plate_height=str(Prop(510,720,"H")), border_top="0.7", border_bottom="0.7", border_left="0.1", border_right="0.1", space=str(Prop(510,720,"S")), onStock=True, sign="1" ),
-    dict(sample_id="4628935902", sample_name="4 628 935902",Lwidth= "730", Lheight="600" ,plate_width=str(Prop(600,730,"W")), plate_height=str(Prop(600,730,"H")), border_top="0.7", border_bottom="0.7", border_left="0.1", border_right="0.7", space=str(Prop(600,730,"S")), onStock=False, sign="23" ),
-    dict(sample_id="4628935903", sample_name="4 628 935903",Lwidth= "2070", Lheight="510" ,plate_width=str(Prop(710,2070,"W")), plate_height=str(Prop(710,2070,"H")), border_top="0.7", border_bottom="0.7", border_left="0.7", border_right="0.7", space=str(Prop(710,2070,"S")), onStock=True, sign="9" ),
-    dict(sample_id="4859276283", sample_name="4 859 276283",plate_width="12", plate_height="10", border_top="0.1", border_bottom="0.1", border_left="0.7", border_right="0.1", space="4", onStock=False ),
-    dict(sample_id="4783926189", sample_name="4 783 926189",plate_width="22", plate_height="11", border_top="0.1", border_bottom="0.7", border_left="0.7", border_right="0.7", space="1", onStock=True ),
-    dict(sample_id="4734654324", sample_name="4 734 654324",plate_width="11", plate_height="11", border_top="0.7", border_bottom="0.1", border_left="0.7", border_right="0.1", space="3", onStock=False ),
+    dict(sample_id="http://192.168.100.12:8001/?code=CUT", sample_name="CIĘCIE", OimgPath = "Labels/Operations/CUT.png", space = "3"),
+    dict(sample_id="http://192.168.100.12:8001/?code=TAPE", sample_name="OKLEJANIE", OimgPath = "Labels/Operations/TAPE.jpg",space = "3"),
+    dict(sample_id="http://192.168.100.12:8001/?code=DRILL", sample_name="WIERCENIE", OimgPath = "Labels/Operations/DRILL.png", space="3"),
+    dict(sample_id="http://192.168.100.12:8001/?code=PAINT", sample_name="MALOWANIE", OimgPath = "Labels/Operations/PAINT.png"),
+    dict(sample_id="http://192.168.100.12:8001/?code=STORE", sample_name="MAGAZYN", OimgPath = "Labels/Operations/STORE.jpg"),
+    dict(sample_id="http://192.168.100.12:8001/?code=PACK", sample_name="PAKOWANIE", OimgPath = "Labels/Operations/PACK.png"),
+    dict(sample_id="http://192.168.100.12:8001/?code=PREVIEW", sample_name="INFO", OimgPath = "Labels/Modes/PREVIEW.png"),
+    dict(sample_id="http://192.168.100.12:8001/?code=REPORT", sample_name="RAPORT", OimgPath = "Labels/Modes/REPORT.png"),
+    dict(sample_id="http://192.168.100.12:8001/?code=WORKER1", sample_name="JAN", OimgPath = "Labels/Modes/WORKER.png"),
+    dict(sample_id="http://192.168.100.12:8001/?code=WORKER2", sample_name="KAROL", OimgPath = "Labels/Modes/WORKER.png"),
+    dict(sample_id="http://192.168.100.12:8001/?code=WORKER3", sample_name="ADAM", OimgPath = "Labels/Modes/WORKER.png")
 ]
 
-label_writer.write_labels(records, target="Labels/labels.pdf")
+label_writer.write_labels(records, target="Labels/OperationsModes.pdf", base_url=".")

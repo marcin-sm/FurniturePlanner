@@ -1,11 +1,20 @@
 import http.server
 import socketserver
+import sys
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from FurniturePlanner import glob
 
 modes = {}
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+
+    buffer = 1
+    log_file = open('logfile.txt', 'w', buffer)
+    def log_message(self, format, *args):
+        self.log_file.write("%s - - [%s] %s\n" %
+                            (self.client_address[0],
+                             self.log_date_time_string(),
+                             format%args))
     
 
     def do_GET(self):

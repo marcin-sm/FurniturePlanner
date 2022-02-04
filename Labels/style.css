@@ -74,3 +74,37 @@ img {
     padding: 0.4mm;
     font-size: 4px;
 }
+
+.label2 {
+    font-family: Arial, Verdana, Helvetica, sans;
+    font-weight: bold;
+    vertical-align: middle;
+    display: inline-block;
+    height: 3mm;
+
+    font-size: 9.5px;
+    border-radius: 25px;
+
+    -webkit-transform: rotate(-90deg) translateY(100%);
+    -webkit-transform-origin: bottom left;
+    transform: rotate(-90deg) translateY(100%);
+    transform-origin: bottom left;
+    vertical-align: -6.45mm;
+    text-align: center;
+    padding: 0mm;
+    margin: 1mm;
+
+}
+
+.icon {
+    
+
+    display: inline-block; 
+    vertical-align: middle;
+    height: 14mm;
+    width: 20mm;
+    position: absolute;
+    right: 10%;
+
+
+}

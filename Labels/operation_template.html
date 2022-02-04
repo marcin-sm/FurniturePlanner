@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<img src="{{label_tools.qr_code(sample_id)}}" />
+<span class='label2' {% if onStock %}
+style = "background-color:black; color:white;"
+{% endif %}>
+    {{ sample_name }}
+</span>
+
+<!--<div style = "display: inline-block; padding:{{ space }}mm"> </div>--> 
+
+<img src="{{OimgPath}}" class="icon">
+
+
+</body>
+</html>
