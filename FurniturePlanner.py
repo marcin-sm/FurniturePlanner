@@ -22,10 +22,15 @@ class Plate:
         self.type = type
         self.material = ''
         self.covering = glob.Dfornir
+
         self.edgesTaped = [0,0,0,0]
         self.toDrill = False
         self.isDrilled = False
         self.numOfHoles = 0
+        self.Operations = dict.fromkeys(glob.Operations)
+
+
+
         self.code = RandomCode(10)
         self.qr = glob.server_url+self.code
         self.Sid = '' 
@@ -54,94 +59,128 @@ class Corpus:
     BackOffset = 5
     FrontOffset = 2
 
-    def __init__(self,h,w,d, DownMiddleUp, Function,  isCorner: bool, FullTopWall: bool,NumOrKitchenware=''):
+    def __init__(self,h,w,d, DownMiddleUp, Purpose,  isCorner: bool, FullTopWall: bool,NumOrKitchenware=''):
+
+        #====== CORPUS BASIC ELEMENTS ======
         self.plates =[]
         self.accesories = []
+
+        #====== CORPUS BASIC PARAMETERS ======
         self.height = h
         self.width = w
         self.depth = d
         self.DownMiddleUp = DownMiddleUp
-        self.Function = Function
+        self.Purpose = Purpose
         self.NumOrKitchenware = NumOrKitchenware
         self.isCorner = isCorner
         self.FullTopWall = FullTopWall
-        #Plate.edges = [height,width,height,width]
+
+        # ====== BACK ======
         self.Back = Plate(h-2*self.BackOffset,w-2*self.BackOffset,glob.BplatT,'back')
         self.Back.name = 'Plecy'
+        self.Back.Operations.update(dict.fromkeys(['CUT', 'STORE', 'PACK'], 'TBD'))
         self.plates.append(self.Back)
 
+        # ====== LEFT WALL ======
         self.Lwall = Plate (h,d,glob.FplatT,'wall')
         self.Lwall.name = 'Sciana lewa'
+        self.Lwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
         self.Lwall.edgesTaped = [h,d,0,d]
         PlanDrilling (self.Lwall)
         self.plates.append (self.Lwall)
+
+        # ====== RIGHT WALL ======
         self.Rwall = Plate (h,d,glob.FplatT,'wall')
         self.Rwall.name = 'Sciana prawa'
+        self.Rwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
         self.Rwall.edgesTaped = [0,d,h,d]
         PlanDrilling (self.Rwall)
         self.plates.append (self.Rwall)
 
+
+        # ====== BOTTOM WALL ======
         self.Bwall = Plate (w-2*glob.FplatT,d,glob.FplatT,'wreath')
         self.Bwall.name = 'Wieniec dolny'
+        self.Bwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
         self.Bwall.edgesTaped = [w-2*glob.FplatT,0,0,0]
         self.plates.append (self.Bwall)
 
+        # ====== TOP WALL ======
         if FullTopWall:
             self.Twall = Plate (w-2*glob.FplatT,d,glob.FplatT,'wreath')
             self.Twall.name = 'Wieniec gorny'
+            self.Twall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
             self.Twall.edgesTaped = [w-2*glob.FplatT,0,0,0]
             self.plates.append (self.Twall)
         else:
             self.Twall1 = Plate (w-2*glob.FplatT,100,glob.FplatT,'wreath')
             self.Twall1.name = 'Wieniec gorny 1'
+            self.Twall1.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
             self.Twall1.edgesTaped = [w-2*glob.FplatT,0,w-2*glob.FplatT,0]
             self.plates.append (self.Twall1)
             self.Twall2 = Plate (w-2*glob.FplatT,100,glob.FplatT,'wreath')
             self.Twall2.name = 'Wieniec gorny 2'
+            self.Twall2.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
             self.Twall2.edgesTaped = [w-2*glob.FplatT,0,w-2*glob.FplatT,0]
             self.plates.append (self.Twall2)
 
+        # ====== FRONT ======
         self.Front = Plate(h-2*self.FrontOffset,w-2*self.FrontOffset,glob.FplatT, 'front')
         self.Front.name = 'Front'
+        self.Front.Operations.update(dict.fromkeys(['CUT', 'DRILL', 'PAINT', 'STORE', 'PACK'], 'TBD'))
         self.plates.append(self.Front) 
 
+
+        # ====== CORNER CORPUS CASE - ADDITIONAL PLATES ======
         if DownMiddleUp == "down":
             self.accesories.append ("4 x nogi")
             if isCorner:
+                # ====== CORNER WALL - LOWER CORPUS ======
                 self.Cwall = Plate (h,d+5,glob.FplatT,'wall')
                 self.Cwall.name = 'Sciana narozna'
+                self.Cwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
                 self.plates.append (self.Cwall)
-
 
         elif DownMiddleUp == "up":
             self.accesories.append ("2 x wieszak")
             if isCorner:
+                # ====== CORNER BACK - UPPER CORPUS ======
                 self.Cback = Plate (h,w-d-glob.FplatT,glob.FplatT,'wall')
                 self.Cback.name = 'Plecy narozne'
+                self.Cback.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
                 self.Cback.edgesTaped = [0,w-d-glob.FplatT,0,w-d-glob.FplatT]
                 #drill
                 self.plates.append (self.Cback)
+
+                # ====== CORNER WALL - UPPER CORPUS ======
                 self.Cwall = Plate (h,d,glob.FplatT,'wall')
                 self.Cwall.name = 'Sciana narozna'
+                self.Cwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
                 self.Cwall.edgesTaped = [h,d,0,d]
                 #drill
                 self.plates.append (self.Cwall)
+
+                # ====== CORNER BOTTOM WALL - LOWER CORPUS ======
                 self.CBwall = Plate (w-d-glob.FplatT,d,glob.FplatT,'wreath')
                 self.CBwall.name = 'Wieniec narozny dolny'
+                self.CBwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
                 self.CBwall.edgesTaped = [w-d-glob.FplatT,0,0,0]
                 self.plates.append (self.CBwall)
+
+                # ====== CORNER BOTTOM WALL - UPPER CORPUS ======
                 self.CTwall = Plate (w-d-glob.FplatT,d,glob.FplatT,'wreath')
                 self.CTwall.name = 'Wieniec narozny gorny'
+                self.CTwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
                 self.CTwall.edgesTaped = [w-d-glob.FplatT,0,0,0]
                 self.plates.append (self.CTwall)
                 self.accesories.append ("2 x wieszak")
 
-        #function section 
-        functions = ['drawers','kitchenware', 'shelfs']
+        # ====== SPECIAL PURPOSE ====== 
+        purposes = ['drawers','kitchenware', 'shelfs']
 
-        if Function in functions:
+        if Purpose in purposes:
 
-            if Function == 'shelfs':
+            if Purpose == 'shelfs':
                 numberOfShelfs = int(h/300)
                 for i in range(numberOfShelfs):
                     plat = Plate (w-2*glob.FplatT-1,d-glob.FplatT,glob.FplatT,'shelf','Polka')
@@ -151,11 +190,11 @@ class Corpus:
 
         else:
 
-            print ("no such function as",Function)
+            print ("no such Purpose as",Purpose)
 
 
 
-
+    # ====== CORPUS SPECIFIC METHODS ======
 
     def showComponents(self, accesories:bool):
         totalArea = 0
