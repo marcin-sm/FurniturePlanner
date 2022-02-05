@@ -24,3 +24,13 @@ Prod.Add(Proj2)
 GenerteLabels(Prod.plates,"output/labels.pdf")
 
 print("--- %s seconds ---" % round((time.time() - start_time),0),str(len(Prod.plates))+" plates")
+
+# Prod.OperationsProgress(print=True)
+
+#GenerateStock / CheckStock / applicable Stock items form STORE to PACK state
+
+# Prod.OperationsProgress(print=True)
+
+# start server to enable changes (rest of production)
+
+# continuous Prod.OperationsProgress(print=True) to REPORT client

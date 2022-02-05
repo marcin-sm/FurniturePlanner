@@ -294,6 +294,10 @@ class Production:
         else: c = Counter(plat.Sid for plat in lst.plates)
         print (c.most_common())
 
+    def OperationsProgress (self, print:bool):
+        
+        True # TBD
+
 
 # ====== GENERIC METHODS ======
 
@@ -315,8 +319,6 @@ def GenerteLabels (listOfPlates: list, path):
         records.append(CreateEntry(p.width,p.height,p.edgesTaped,p.code,p.qr,p.name,RandomBool()))
     Generator (records,path)
 
-def OperationsProgress (ListOfPlates: list):
-    True # TBD
 
 from DrillModule import PlanDrilling
 from LabelModule import CreateEntry, Generator
