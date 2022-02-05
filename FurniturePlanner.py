@@ -28,9 +28,10 @@ class Plate:
         self.isDrilled = False
         self.numOfHoles = 0
         self.Operations = dict.fromkeys(glob.Operations)
+        self.Operations ['CUT'] = 'TBD'
 
 
-
+        self.Project = ''
         self.code = RandomCode(10)
         self.qr = glob.server_url+self.code
         self.Sid = '' 
@@ -64,6 +65,7 @@ class Corpus:
         #====== CORPUS BASIC ELEMENTS ======
         self.plates =[]
         self.accesories = []
+        self.Project = ''
 
         #====== CORPUS BASIC PARAMETERS ======
         self.height = h
@@ -235,10 +237,16 @@ class Project:
     def Add(self,item):
 
         if type(item) == Corpus:
+            item.Project = self.Pname
+            for p in item.plates:
+                p.Project = self.Pname
             self.corpuses.append(item)
             self.plates = self.plates + item.plates
+
         elif type(item) == Plate:
+            item.Project = self.Pname
             self.plates.append(item)
+
 
     def Aggregate(self):
 
@@ -268,6 +276,9 @@ class Production:
 
     def Add(self,project:Project):
         self.projects.append(project)
+        self.corpuses = self.corpuses + project.corpuses
+        self.plates = self.plates + project.plates
+
 
     def Aggregate(self,ignoreRotate: bool):
         
@@ -283,6 +294,8 @@ class Production:
         else: c = Counter(plat.Sid for plat in lst.plates)
         print (c.most_common())
 
+
+# ====== GENERIC METHODS ======
 
 def RandomCode (length):
 	start = 0   # inclusive
@@ -301,6 +314,9 @@ def GenerteLabels (listOfPlates: list, path):
     for p in listOfPlates:
         records.append(CreateEntry(p.width,p.height,p.edgesTaped,p.code,p.qr,p.name,RandomBool()))
     Generator (records,path)
+
+def OperationsProgress (ListOfPlates: list):
+    True # TBD
 
 from DrillModule import PlanDrilling
 from LabelModule import CreateEntry, Generator
