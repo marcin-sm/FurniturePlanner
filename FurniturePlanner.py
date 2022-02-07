@@ -362,7 +362,9 @@ def GenerteLabels (listOfPlates: list, path):
     Generator (records,path)
 
 def FindPlate (ListOfplates:list,code):
-    return [x for x in ListOfplates if x.code == code]
+    found = [x for x in ListOfplates if x.code == code]
+    if found: return found.pop()
+    else: return 'noplate'
 
 from DrillModule import PlanDrilling
 from LabelModule import CreateEntry, Generator

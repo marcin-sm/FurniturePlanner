@@ -30,7 +30,7 @@ Prod.OperationsProgress (prt = True)
 # start server to enable changes (rest of production)
 code2find = '?'
 True #stab fo breakpoint to inject code from scanner
-plateFound= FindPlate (Prod.plates,code2find).pop()
+plateFound= FindPlate (Prod.plates,code2find)
 
 print (plateFound.PerformOperation('PAINT', 'datetime'))
 
