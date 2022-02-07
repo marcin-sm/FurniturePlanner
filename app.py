@@ -21,16 +21,19 @@ Proj2.Add(Corpus(1600,600,350,'up','shelfs',False,True))
 Prod.Add(Proj)
 Prod.Add(Proj2)
 
-GenerteLabels(Prod.plates,"output/labels.pdf")
-
-print("--- %s seconds ---" % round((time.time() - start_time),0),str(len(Prod.plates))+" plates")
-
-# Prod.OperationsProgress(print=True)
-
 #GenerateStock / CheckStock / applicable Stock items form STORE to PACK state
 
-# Prod.OperationsProgress(print=True)
+#GenerteLabels(Prod.plates,"output/labels.pdf")
+
+Prod.OperationsProgress (prt = True)
 
 # start server to enable changes (rest of production)
+code2find = '?'
+True #stab fo breakpoint to inject code from scanner
+plateFound= FindPlate (Prod.plates,code2find).pop()
 
-# continuous Prod.OperationsProgress(print=True) to REPORT client
+print (plateFound.PerformOperation('PAINT', 'datetime'))
+
+Prod.OperationsProgress (prt = True)
+
+print("--- %s seconds ---" % round((time.time() - start_time),0),str(len(Prod.plates))+" plates")

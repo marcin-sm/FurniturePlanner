@@ -1,6 +1,7 @@
 from collections import Counter
 import copy
 import random
+from datetime import datetime
 
 
 class glob:
@@ -29,6 +30,7 @@ class Plate:
         self.numOfHoles = 0
         self.Operations = dict.fromkeys(glob.Operations)
         self.Operations ['CUT'] = 'TBD'
+        self.Operations ['PACK'] = 'TBD'
 
 
         self.Project = ''
@@ -50,6 +52,29 @@ class Plate:
 
     def PrintPlate(self):
         print (self.name, self.thickness, "mm  : ", self.height, "mm x ", self.width, "mm")
+
+    def PerformOperation (self, OperationName, info):
+        message = ''
+        info2 =''
+        now = datetime.now()
+        if info == 'datetime':
+            info2 = now.strftime("%m/%d/%Y, %H:%M:%S")
+        if OperationName in self.Operations:
+            if self.Operations[OperationName] == 'TBD' :
+                self.Operations[OperationName] = info2
+                message = 'Operation '+ OperationName + ' performed succesfully'  
+
+            elif self.Operations[OperationName] != 'TBD' and self.Operations[OperationName]:
+                message = 'Operation '+ OperationName + ' has already been performed by '+ self.Operations[OperationName]
+
+            else:
+                message = 'Operation has not been planned for this plate'
+
+        else:
+            message = 'Unknown Operation'
+
+        return message
+
         
 
 class Accesory:
@@ -186,6 +211,7 @@ class Corpus:
                 numberOfShelfs = int(h/300)
                 for i in range(numberOfShelfs):
                     plat = Plate (w-2*glob.FplatT-1,d-glob.FplatT,glob.FplatT,'shelf','Polka')
+                    plat.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'STORE', 'PACK'], 'TBD'))
                     plat.edgesTaped = [plat.height,0,0,0]
                     self.plates.append (plat)
 
@@ -294,9 +320,25 @@ class Production:
         else: c = Counter(plat.Sid for plat in lst.plates)
         print (c.most_common())
 
-    def OperationsProgress (self, print:bool):
+    def OperationsProgress (self, prt:bool):
+       
+        #ProgressDict = dict.fromkeys(glob.Operations,{'NOT DONE':0,'DONE':0})
+        ProgressDict = dict((o,dict({'NOT DONE':0,'DONE':0})) for o in glob.Operations)
+        for p in self.plates:
+            for o in p.Operations:
+                field = p.Operations[o]
+                if p.Operations[o] == 'TBD':
+                    ProgressDict[o]['NOT DONE'] +=1
+                    #print (o,ProgressDict[o],ProgressDict[o]['NOT DONE'])
+                elif p.Operations[o] != 'TBD' and p.Operations [o]:
+                    ProgressDict [o]['DONE'] +=1
         
-        True # TBD
+        if prt:
+            for k in ProgressDict:
+                D = ProgressDict [k]['DONE']
+                ND = ProgressDict [k]['NOT DONE']
+                print (k, ProgressDict[k], '| Progress:', round(D*100/(D+ND),0),'%')
+
 
 
 # ====== GENERIC METHODS ======
@@ -319,6 +361,8 @@ def GenerteLabels (listOfPlates: list, path):
         records.append(CreateEntry(p.width,p.height,p.edgesTaped,p.code,p.qr,p.name,RandomBool()))
     Generator (records,path)
 
+def FindPlate (ListOfplates:list,code):
+    return [x for x in ListOfplates if x.code == code]
 
 from DrillModule import PlanDrilling
 from LabelModule import CreateEntry, Generator
