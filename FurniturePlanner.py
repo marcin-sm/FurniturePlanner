@@ -339,6 +339,8 @@ class Production:
                 ND = ProgressDict [k]['NOT DONE']
                 print (k, ProgressDict[k], '| Progress:', round(D*100/(D+ND),0),'%')
 
+        return ProgressDict
+
 
 
 # ====== GENERIC METHODS ======

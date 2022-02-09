@@ -28,12 +28,12 @@ Prod.Add(Proj2)
 Prod.OperationsProgress (prt = True)
 
 # start server to enable changes (rest of production)
-code2find = '?'
-True #stab fo breakpoint to inject code from scanner
-plateFound= FindPlate (Prod.plates,code2find)
+#code2find = '?'
+#True #stab fo breakpoint to inject code from scanner
+#plateFound= FindPlate (Prod.plates,code2find)
 
-print (plateFound.PerformOperation('PAINT', 'datetime'))
+#print (plateFound.PerformOperation('PAINT', 'datetime'))
 
-Prod.OperationsProgress (prt = True)
+#Prod.OperationsProgress (prt = True)
 
 print("--- %s seconds ---" % round((time.time() - start_time),0),str(len(Prod.plates))+" plates")
