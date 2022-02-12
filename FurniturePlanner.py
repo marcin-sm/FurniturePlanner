@@ -6,6 +6,7 @@ from datetime import datetime
 
 class glob:
     FplatT = 18
+    FplatD = 650 #[kg/m3]
     BplatT = 3
     Dfornir = 'RAL9001'
     Operations = ['CUT', 'TAPE', 'DRILL', 'PAINT', 'STORE', 'PACK']
@@ -23,6 +24,7 @@ class Plate:
         self.type = type
         self.material = ''
         self.covering = glob.Dfornir
+        self.mass = (glob.FplatD*self.area*self.thickness)/1000000000 #[kg]
 
         self.edgesTaped = [0,0,0,0]
         self.toDrill = False
