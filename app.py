@@ -1,4 +1,5 @@
 from FurniturePlanner import *
+from DrillModule import MultiSpindleDrillingMachnie
 import time
 start_time = time.time()
 
@@ -21,19 +22,10 @@ Proj2.Add(Corpus(1600,600,350,'up','shelfs',False,True))
 Prod.Add(Proj)
 Prod.Add(Proj2)
 
-#GenerateStock / CheckStock / applicable Stock items form STORE to PACK state
+for p in Prod.plates[:4]:
+    MultiSpindleDrillingMachnie(p)
 
-#GenerteLabels(Prod.plates,"output/labels.pdf")
+#MultiSpindleDrillingMachnie(Plate(100,3000,18,'blend','cokol'))
 
-Prod.OperationsProgress (prt = True)
-
-# start server to enable changes (rest of production)
-#code2find = '?'
-#True #stab fo breakpoint to inject code from scanner
-#plateFound= FindPlate (Prod.plates,code2find)
-
-#print (plateFound.PerformOperation('PAINT', 'datetime'))
-
-#Prod.OperationsProgress (prt = True)
 
 print("--- %s seconds ---" % round((time.time() - start_time),0),str(len(Prod.plates))+" plates")
