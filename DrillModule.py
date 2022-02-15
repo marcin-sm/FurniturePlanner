@@ -1,48 +1,40 @@
-from FurniturePlanner import Plate
+from FurniturePlanner import Corpus, Plate
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib import pylab
-import numpy as np
 
+class Hole:
 
-class MultiSpindleDrillingMachnie:
-
-    def __init__(self,plate:Plate):
-        self.Type = plate.type
-        self.H = plate.height
-        self.W = plate.width
-        print ("DRILLING", plate.name,"of type", self.Type,"and Dimensions",self.H,"x",self.W)
-
-        fig = pylab.gcf()
-        fig.canvas.manager.set_window_title(plate.name)
-        plt.axes().add_patch(
-            patches.Rectangle(
-                (0, 0),   # (x,y)
-                self.W,          # width
-                self.H,          # height
-                facecolor="None",
-                edgecolor="black",
-                alpha=1
-            )
-        )
-        xpoints = np.array([200, 300])
-        ypoints = np.array([30, 250])
-
-        plt.plot(xpoints, ypoints, 'o')
-        plt.gca().set_aspect('equal', adjustable='box')
-        plt.autoscale()
-        plt.show()
-
-
+    def __init__(self,x,y,s) -> None:
+        self.x = x
+        self.y = y
+        self.s = s
+        self.through = False
+        self.covered = False
 
 def PlanDrilling (plate:Plate):
 
-    H = plate.height
-    W = plate.width
-    offset = 150 #up and down offset
-    spacing = 32
+    if plate.type=='wall_shelfs':
 
-    plate.numOfHoles = 1+2*int((0.5*H-offset)/spacing)
+        H = plate.height
+        W = plate.width
+        
+
+        offset = 100 #up and down offset
+        Voffset = 35
+        spacing = 32
+        plate.numOfHoles = 1+2*int((0.5*H-offset)/spacing)
+        n=plate.numOfHoles
+        t=(H-(n-1)*spacing-2*offset)/2
+
+        for h in range(n):
+            plate.holes.append (Hole(Voffset,offset+t+h*spacing,6))
+            plate.holes.append (Hole(W-Voffset,offset+t+h*spacing,4))
+        
+
+    elif plate.type=='wall_drawers':
+        True
+
 
 
 def Drill (plate:Plate):
@@ -54,3 +46,48 @@ def Drill (plate:Plate):
     else:
         print ("No drill operation on object")
         return 
+
+def ShowPlate (plate:Plate):
+        #RECTANGLE
+        fig = pylab.gcf()
+        fig.canvas.manager.set_window_title(plate.name)
+        plt.axes().add_patch(
+            patches.Rectangle(
+                (0, 0),   # (x,y)
+                plate.width,          # width
+                plate.height,          # height
+                facecolor="None",
+                edgecolor="black",
+                alpha=1
+            )
+        )
+        plt.text(0.5*plate.width,plate.height+50,plate.width,fontsize=9, horizontalalignment='center', verticalalignment='center')
+        plt.text(plate.width+50,0.5*plate.height,plate.height,fontsize=9, rotation=90, horizontalalignment='center', verticalalignment='center',)
+        #TAPING
+        LW=3
+        #left
+        if plate.edgesTaped[0]:plt.vlines(x=0, ymin=0, ymax=plate.height, color="black", linewidth=LW)
+        #right
+        if plate.edgesTaped[2]:plt.vlines(x=plate.width, ymin=0, ymax=plate.height, color="black", linewidth=LW)
+        #up
+        if plate.edgesTaped[1]:plt.hlines(plate.height,xmin=0,xmax=plate.width, color="black", linewidth=LW)
+        #down
+        if plate.edgesTaped[3]:plt.hlines(0,xmin=0,xmax=plate.width, color="black", linewidth=LW)
+
+        #HOLES
+        holes = plate.holes
+        X=list(h.x for h in holes)
+        Y=list(h.y for h in holes)
+        S=list(h.s for h in holes)
+        plt.scatter(X, Y, S, facecolors='none', edgecolors='black')
+        plt.gca().set_aspect('equal', adjustable='box')
+
+        plt.autoscale(tight=None)
+        plt.show()
+
+
+
+class MultiSpindleDrillingMachnie:
+
+    def __init__(self,plate:Plate):
+        matrix = plate.holes

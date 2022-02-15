@@ -1,5 +1,5 @@
 from FurniturePlanner import *
-from DrillModule import MultiSpindleDrillingMachnie
+from DrillModule import ShowPlate
 import time
 start_time = time.time()
 
@@ -22,10 +22,9 @@ Proj2.Add(Corpus(1600,600,350,'up','shelfs',False,True))
 Prod.Add(Proj)
 Prod.Add(Proj2)
 
-for p in Prod.plates[:4]:
-    MultiSpindleDrillingMachnie(p)
-
-#MultiSpindleDrillingMachnie(Plate(100,3000,18,'blend','cokol'))
-
+for plate in Prod.plates[:25]:
+    if plate.type == 'wall_shelfs':
+        PlanDrilling(plate)
+        ShowPlate(plate)
 
 print("--- %s seconds ---" % round((time.time() - start_time),0),str(len(Prod.plates))+" plates")

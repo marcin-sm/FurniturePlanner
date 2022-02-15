@@ -12,6 +12,7 @@ class glob:
     Operations = ['CUT', 'TAPE', 'DRILL', 'PAINT', 'STORE', 'PACK']
     Modes = ['OPERATION','VIEW']
     server_url="http://192.168.100.12:8001/?code="
+    purposes = ['drawers','kitchenware', 'shelfs']
 
 class Plate:
 
@@ -30,6 +31,7 @@ class Plate:
         self.toDrill = False
         self.isDrilled = False
         self.numOfHoles = 0
+        self.holes = []
         self.Operations = dict.fromkeys(glob.Operations)
         self.Operations ['CUT'] = 'TBD'
         self.Operations ['PACK'] = 'TBD'
@@ -115,6 +117,7 @@ class Corpus:
         self.Lwall.name = 'Sciana lewa'
         self.Lwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
         self.Lwall.edgesTaped = [h,d,0,d]
+        self.Lwall.type+='_'+self.Purpose
         PlanDrilling (self.Lwall)
         self.plates.append (self.Lwall)
 
@@ -123,6 +126,7 @@ class Corpus:
         self.Rwall.name = 'Sciana prawa'
         self.Rwall.Operations.update(dict.fromkeys(['CUT', 'TAPE', 'DRILL', 'STORE', 'PACK'], 'TBD'))
         self.Rwall.edgesTaped = [0,d,h,d]
+        self.Rwall.type+='_'+self.Purpose
         PlanDrilling (self.Rwall)
         self.plates.append (self.Rwall)
 
@@ -205,9 +209,8 @@ class Corpus:
                 self.accesories.append ("2 x wieszak")
 
         # ====== SPECIAL PURPOSE ====== 
-        purposes = ['drawers','kitchenware', 'shelfs']
-
-        if Purpose in purposes:
+        
+        if Purpose in glob.purposes:
 
             if Purpose == 'shelfs':
                 numberOfShelfs = int(h/300)
