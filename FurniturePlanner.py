@@ -89,7 +89,7 @@ class Corpus:
     BackOffset = 5
     FrontOffset = 2
 
-    def __init__(self,h,w,d, DownMiddleUp, Purpose,  isCorner: bool, FullTopWall: bool,NumOrKitchenware=''):
+    def __init__(self,h,w,d, Purpose, DownMiddleUp = 'middle', isCorner = False, FullTopWall = True, NumOfShelves = 0, DrawersTOP2BOT=[]):
 
         #====== CORPUS BASIC ELEMENTS ======
         self.plates =[]
@@ -100,11 +100,13 @@ class Corpus:
         self.height = h
         self.width = w
         self.depth = d
-        self.DownMiddleUp = DownMiddleUp
         self.Purpose = Purpose
-        self.NumOrKitchenware = NumOrKitchenware
+        self.DownMiddleUp = DownMiddleUp
         self.isCorner = isCorner
         self.FullTopWall = FullTopWall
+        self.NumOfShelves = NumOfShelves
+        self.DrawersTOP2BOT = DrawersTOP2BOT
+        self.NumOfDrawers = len(DrawersTOP2BOT)
 
         # ====== BACK ======
         self.Back = Plate(h-2*self.BackOffset,w-2*self.BackOffset,glob.BplatT,'back')
@@ -158,10 +160,17 @@ class Corpus:
             self.plates.append (self.Twall2)
 
         # ====== FRONT ======
-        self.Front = Plate(h-2*self.FrontOffset,w-2*self.FrontOffset,glob.FplatT, 'front')
-        self.Front.name = 'Front'
-        self.Front.Operations.update(dict.fromkeys(['CUT', 'DRILL', 'PAINT', 'STORE', 'PACK'], 'TBD'))
-        self.plates.append(self.Front) 
+        if Purpose == 'drawers':
+            WeightedSum = sum(self.DrawersTOP2BOT)
+            H2Divide = h-(self.NumOfDrawers+1)*self.FrontOffset
+            for i in range(self.NumOfDrawers):
+                self.plates.append(Plate(self.DrawersTOP2BOT[i]*H2Divide/WeightedSum,w-2*self.FrontOffset,glob.FplatT, 'Front szuflady'))
+                
+        else:
+            self.Front = Plate(h-2*self.FrontOffset,w-2*self.FrontOffset,glob.FplatT, 'front')
+            self.Front.name = 'Front'
+            self.Front.Operations.update(dict.fromkeys(['CUT', 'DRILL', 'PAINT', 'STORE', 'PACK'], 'TBD'))
+            self.plates.append(self.Front) 
 
 
         # ====== CORNER CORPUS CASE - ADDITIONAL PLATES ======
