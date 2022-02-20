@@ -32,6 +32,7 @@ class Plate:
         self.isDrilled = False
         self.numOfHoles = 0
         self.holes = []
+        self.gruppedHoles = []
         self.Operations = dict.fromkeys(glob.Operations)
         self.Operations ['CUT'] = 'TBD'
         self.Operations ['PACK'] = 'TBD'

@@ -2,6 +2,7 @@ from FurniturePlanner import Corpus, Plate
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib import pylab
+from collections import defaultdict
 
 class Hole:
 
@@ -85,7 +86,72 @@ def ShowPlate (plate:Plate):
         plt.autoscale(tight=None)
         plt.show()
 
+def FindHole (ListOfholes:list,x,y):
+    found = [h for h in ListOfholes if h.x == x and h.y==y]
+    if found: return found.pop()
+    else: return False
 
+def GroupHolesPattern (plate:Plate):
+
+    gridSize = 32
+
+    groups = {'X': [], 'Y':[]}
+    if plate.holes:
+        groupX = defaultdict(list)
+        groupY = defaultdict(list)
+        for h in plate.holes:
+
+            if not h.covered:
+                
+                X1= h.x
+                X2=h.x
+                Y=h.y
+                while (X1 <= plate.width and X1 >= 0) and (X2 <= plate.width and X2 >= 0):
+                    X1 += gridSize
+                    X2 -= gridSize
+                    FoundHole=FindHole (plate.holes, X1,Y)
+                    if FoundHole and not FoundHole.covered:
+                        FoundHole.covered = True
+                        #groupX.append(FoundHole)#(FoundHole.x,FoundHole.y)
+                        #groupX.append((FoundHole.x,FoundHole.y))
+                        #groupX.update({FoundHole.y:FoundHole.x})
+                        groupX[FoundHole.y].append((FoundHole.x,FoundHole.y))
+                    FoundHole=FindHole (plate.holes, X2,Y)
+                    if FoundHole and not FoundHole.covered:
+                        FoundHole.covered = True
+                        #groupX.append(FoundHole)
+                        #groupX.append((FoundHole.x,FoundHole.y))
+                        #groupX.update({FoundHole.y:FoundHole.x})
+                        groupX[FoundHole.y].append((FoundHole.x,FoundHole.y))
+                   
+                    
+                X= h.x
+                Y1=h.y
+                Y2=h.y
+                while (Y1 <= plate.height and Y1 >= 0) and (Y2 <= plate.height and Y2 >= 0):
+                    Y1 += gridSize
+                    Y2 -= gridSize
+                    FoundHole=FindHole (plate.holes, X,Y1)
+                    if FoundHole and not FoundHole.covered:
+                        FoundHole.covered = True
+                        #groupY.append(FoundHole)
+                        #groupY.append((FoundHole.x,FoundHole.y))
+                        groupY[FoundHole.x].append((FoundHole.x,FoundHole.y))
+                    FoundHole=FindHole (plate.holes, X,Y2)
+                    if FoundHole and not FoundHole.covered:
+                        FoundHole.covered = True
+                        #groupY.append(FoundHole)
+                        #groupY.append((FoundHole.x,FoundHole.y))
+                        #groupY.update({FoundHole.x:FoundHole.y})
+                        groupY[FoundHole.x].append((FoundHole.x,FoundHole.y))
+                 
+
+        groups['X']= dict(groupX)
+        groups['Y']= dict(groupY)
+        plate.gruppedHoles = groups
+        
+    else:
+        print ("No holes planned")
 
 class MultiSpindleDrillingMachnie:
 
