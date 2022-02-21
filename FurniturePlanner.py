@@ -31,7 +31,9 @@ class Plate:
         self.toDrill = False
         self.isDrilled = False
         self.numOfHoles = 0
+        self.DrawerHeights = []
         self.holes = []
+        self.holesCoordinates=[]
         self.gruppedHoles = []
         self.Operations = dict.fromkeys(glob.Operations)
         self.Operations ['CUT'] = 'TBD'
@@ -165,7 +167,10 @@ class Corpus:
             WeightedSum = sum(self.DrawersTOP2BOT)
             H2Divide = h-(self.NumOfDrawers+1)*self.FrontOffset
             for i in range(self.NumOfDrawers):
-                self.plates.append(Plate(self.DrawersTOP2BOT[i]*H2Divide/WeightedSum,w-2*self.FrontOffset,glob.FplatT, 'Front szuflady'))
+                drawer = Plate(self.DrawersTOP2BOT[i]*H2Divide/WeightedSum,w-2*self.FrontOffset,glob.FplatT, 'Front szuflady')
+                self.plates.append(drawer)
+                self.Lwall.DrawerHeights.append(drawer.height)
+                self.Rwall.DrawerHeights.append(drawer.height)
                 
         else:
             self.Front = Plate(h-2*self.FrontOffset,w-2*self.FrontOffset,glob.FplatT, 'front')
