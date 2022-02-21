@@ -34,7 +34,7 @@ class Plate:
         self.DrawerHeights = []
         self.holes = []
         self.holesCoordinates=[]
-        self.gruppedHoles = []
+        self.grouppedHoles = []
         self.Operations = dict.fromkeys(glob.Operations)
         self.Operations ['CUT'] = 'TBD'
         self.Operations ['PACK'] = 'TBD'
@@ -167,7 +167,7 @@ class Corpus:
             WeightedSum = sum(self.DrawersTOP2BOT)
             H2Divide = h-(self.NumOfDrawers+1)*self.FrontOffset
             for i in range(self.NumOfDrawers):
-                drawer = Plate(self.DrawersTOP2BOT[i]*H2Divide/WeightedSum,w-2*self.FrontOffset,glob.FplatT, 'Front szuflady')
+                drawer = Plate(round(self.DrawersTOP2BOT[i]*H2Divide/WeightedSum),w-2*self.FrontOffset,glob.FplatT, 'Front szuflady')
                 self.plates.append(drawer)
                 self.Lwall.DrawerHeights.append(drawer.height)
                 self.Rwall.DrawerHeights.append(drawer.height)
@@ -377,7 +377,7 @@ def RandomCode (length):
 def RandomBool():
     return bool(random.getrandbits(1))
 
-def GenerteLabels (listOfPlates: list, path):
+#def GenerteLabels (listOfPlates: list, path):
     records =[]
     for p in listOfPlates:
         records.append(CreateEntry(p.width,p.height,p.edgesTaped,p.code,p.qr,p.name,RandomBool()))
@@ -389,4 +389,4 @@ def FindPlate (ListOfplates:list,code):
     else: return 'noplate'
 
 from DrillModule import PlanDrilling
-from LabelModule import CreateEntry, Generator
+#from LabelModule import CreateEntry, Generator

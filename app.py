@@ -10,7 +10,7 @@ Proj = Project ('KUCHNIA')
 #Proj2 = Project ('SZAFA')
 
 
-Proj.Add(Corpus(2070,450,510,'drawers',DrawersTOP2BOT=[4,6,10,10]))
+Proj.Add(Corpus(2070,450,510,'drawers',DrawersTOP2BOT=[4,6,10,10,20]))
 Proj.Add(Corpus(720,600,350,'shelfs'))
 #Proj.Add(Corpus(720,600,350,'up','shelfs',False,True))
 #Proj.Add(Corpus(720,1200,510,'down','shelfs',False,False))
@@ -24,7 +24,7 @@ Prod.Add(Proj)
 
 for plate in Prod.plates:
     if plate.type == 'wall_drawers':
-        #PlanDrilling(plate)
+        PlanDrilling(plate)
         GroupHolesPattern (plate)
         ShowPlate(plate)
 

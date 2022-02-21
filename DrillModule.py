@@ -14,12 +14,10 @@ class Hole:
         self.covered = False
 
 def PlanDrilling (plate:Plate):
+    H = plate.height
+    W = plate.width
 
     if plate.type=='wall_shelfs':
-
-        H = plate.height
-        W = plate.width
-        
 
         offset = 100 #up and down offset
         Voffset = 35
@@ -37,7 +35,16 @@ def PlanDrilling (plate:Plate):
         
 
     elif plate.type=='wall_drawers':
-        True
+        drawerOffset = 30
+        heightSum = 0
+        drawers = plate.DrawerHeights
+        drawers.reverse()
+        for drawer in drawers:
+            plate.holes.append(Hole(37,(heightSum+drawerOffset),6))
+            plate.holes.append(Hole(37+160,heightSum+drawerOffset,6))
+            plate.holes.append(Hole(37+256,heightSum+drawerOffset,6))
+            heightSum+=drawer
+
 
 
 
@@ -114,16 +121,10 @@ def GroupHolesPattern (plate:Plate):
                 FoundHole=FindHole (plate.holes, X1,Y)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
-                    #groupX.append(FoundHole)#(FoundHole.x,FoundHole.y)
-                    #groupX.append((FoundHole.x,FoundHole.y))
-                    #groupX.update({FoundHole.y:FoundHole.x})
                     groupX[FoundHole.y].append((FoundHole.x,FoundHole.y))
                 FoundHole=FindHole (plate.holes, X2,Y)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
-                    #groupX.append(FoundHole)
-                    #groupX.append((FoundHole.x,FoundHole.y))
-                    #groupX.update({FoundHole.y:FoundHole.x})
                     groupX[FoundHole.y].append((FoundHole.x,FoundHole.y))
                 
                 
@@ -136,21 +137,34 @@ def GroupHolesPattern (plate:Plate):
                 FoundHole=FindHole (plate.holes, X,Y1)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
-                    #groupY.append(FoundHole)
-                    #groupY.append((FoundHole.x,FoundHole.y))
                     groupY[FoundHole.x].append((FoundHole.x,FoundHole.y))
                 FoundHole=FindHole (plate.holes, X,Y2)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
-                    #groupY.append(FoundHole)
-                    #groupY.append((FoundHole.x,FoundHole.y))
-                    #groupY.update({FoundHole.x:FoundHole.y})
                     groupY[FoundHole.x].append((FoundHole.x,FoundHole.y))
-                 
+
+        #handle uncovered & out of pattern
+        for h in plate.holes:
+            if not h.covered:
+                for k,v in groupX.items():
+                    if k == h.y and (v[0][0]-h.x)%gridSize ==0:
+                        groupX[k].append((h.x,h.y))
+                        h.covered = True
+                    else:
+                        groupX[k].append((h.x,h.y))
+                        h.covered = True
+
+                for k,v in groupX.items():
+                    if k == h.x and (v[0][1]-h.y)%gridSize ==0:
+                        groupY[k].append((h.x,h.y))
+                        h.covered = True
+                    else:
+                        groupY[k].append((h.x,h.y))
+                        h.covered = True
 
         groups['X']= dict(groupX)
         groups['Y']= dict(groupY)
-        plate.gruppedHoles = groups
+        plate.grouppedHoles = groups
         
     else:
         print ("No holes planned")
