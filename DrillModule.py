@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib import pylab
 from collections import defaultdict
+import random
+import numpy as np
 
 class Hole:
 
@@ -12,6 +14,7 @@ class Hole:
         self.s = s
         self.through = False
         self.covered = False
+        self.group = ''
 
 def PlanDrilling (plate:Plate):
     H = plate.height
@@ -90,6 +93,7 @@ def ShowPlate (plate:Plate):
         X=list(h.x for h in holes)
         Y=list(h.y for h in holes)
         S=list(h.s for h in holes)
+        C=list(random.choice(['black', 'red', 'blue', 'green']) for h in holes)
         plt.scatter(X, Y, S, facecolors='none', edgecolors='black')
         plt.gca().set_aspect('equal', adjustable='box')
 
@@ -121,10 +125,12 @@ def GroupHolesPattern (plate:Plate):
                 FoundHole=FindHole (plate.holes, X1,Y)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
+                    FoundHole.group = 'Y'+str(Y)
                     groupX[FoundHole.y].append((FoundHole.x,FoundHole.y))
                 FoundHole=FindHole (plate.holes, X2,Y)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
+                    FoundHole.group = 'Y'+str(Y)
                     groupX[FoundHole.y].append((FoundHole.x,FoundHole.y))
                 
                 
@@ -137,10 +143,12 @@ def GroupHolesPattern (plate:Plate):
                 FoundHole=FindHole (plate.holes, X,Y1)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
+                    FoundHole.group = 'X'+str(X)
                     groupY[FoundHole.x].append((FoundHole.x,FoundHole.y))
                 FoundHole=FindHole (plate.holes, X,Y2)
                 if FoundHole and not FoundHole.covered:
                     FoundHole.covered = True
+                    FoundHole.group = 'X'+str(X)
                     groupY[FoundHole.x].append((FoundHole.x,FoundHole.y))
 
         #handle uncovered & out of pattern
